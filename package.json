@@ -1,0 +1,29 @@
+{
+    "name"          : "pile-on",
+    "description"   : "Log-based JSON blob store for S3.",
+    "version"       : "1.0.1",
+    "homepage"      : "http://github.com/eob/pile-on",
+    "keywords"      : ["s3", "lambda"],
+    "author"        : "Ted Benson <edward.benson@gmail.com>",
+    "main"          : "./pile-on",
+    "bugs" :
+    {
+        "mail" : "edward.benson@gmail.com",
+        "url" : "http://github.com/eob/pile-on/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/eob/pile-on.git"
+    },
+    "dependencies": {
+       "underscore": "1.8.3",
+       "underscore-deep-extend": "0.0.5",
+       "q": "1.4.1"
+    },
+    "licenses" :
+    [ {
+        "type" : "MIT", 
+        "url" : "http://github.com/eob/pile-on/raw/master/LICENSE"
+    }
+    ]
+}
