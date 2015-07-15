@@ -1,7 +1,7 @@
 {
     "name"          : "pile-on",
     "description"   : "Log-based JSON blob store for S3.",
-    "version"       : "1.0.3",
+    "version"       : "1.0.4",
     "homepage"      : "http://github.com/eob/pile-on",
     "keywords"      : ["s3", "lambda"],
     "author"        : "Ted Benson <edward.benson@gmail.com>",

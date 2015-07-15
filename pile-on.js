@@ -13,7 +13,11 @@ module.exports = function(S3) {
     return _.flatten(objects);
   };
 
-  var fetchJobKeys = function(bucket, key, upUntilKey, cb) {  
+  var fetchJobKeys = function(bucket, key, upUntilKey, cb) {
+    if (typeof upUntilKey == 'function') {
+      cb = upUntilKey;
+      upUntilKey = undefined;
+    }
     S3.listObjects({Bucket: bucket, Prefix: key}, function(err, data) {
       if (err) {
         return cb(err);
