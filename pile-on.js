@@ -13,18 +13,36 @@ module.exports = function(S3) {
     return _.flatten(objects);
   };
 
-  var fetchJobKeys = function(bucket, key, cb) {  
+  var fetchJobKeys = function(bucket, key, upUntilKey, cb) {  
     S3.listObjects({Bucket: bucket, Prefix: key}, function(err, data) {
       if (err) {
         return cb(err);
       } else {
         if (data && data.Contents) {
           var keys = [];
-          for (var i = 0; i < data.Contents.length; i++) {
-            keys.push(data.Contents[i].Key);
+
+          // Get modified of this filename
+          var lastModified = null;
+          if (upUntilKey) {
+            for (var i = 0; i < data.Contents.length; i++) {
+              if (data.Contents[i].Key == upUntilKey) {
+                lastModified = Date.parse(data.Contents[i].LastModified);
+              }
+            }            
           }
+
+          for (var i = 0; i < data.Contents.length; i++) {
+            if (upUntilKey && lastModified) {
+              if (Date.parse(data.Contents[i].LastModified) <= lastModified) {
+                keys.push(data.Contents[i].Key);
+              }
+            } else {
+              keys.push(data.Contents[i].Key);
+            }
+          }
+
           keys.sort();
-          cb(null, keys);
+          return cb(null, keys);
         } else {
           return cb(null, []);
         }
@@ -76,10 +94,9 @@ module.exports = function(S3) {
 
 
   return {
-
-    readObject: function(bucket, key) {
+    readObject: function(bucket, key, upUntilKey) {
       var deferred = Q.defer();
-      fetchJobKeys(bucket, key, function(err, keys) {
+      fetchJobKeys(bucket, key, upUntilKey, function(err, keys) {
         if (err) {
           deferred.reject(err);
         } else {
@@ -101,9 +118,9 @@ module.exports = function(S3) {
       return deferred.promise;
     },
 
-    readArray: function(bucket, key) {  
+    readArray: function(bucket, key, upUntilKey) {  
       var deferred = Q.defer();
-      fetchJobKeys(bucket, key, function(err, keys) {
+      fetchJobKeys(bucket, key, upUntilKey, function(err, keys) {
         if (err) {
           deferred.reject(err);
         } else {
